@@ -119,11 +119,11 @@ namespace Seek
         {
             try
             {
-                Cursor = System.Windows.Input.Cursors.Wait;
-
+                btnSearch.Content = "Searching...";
                 tbDownloadFolder.Text = System.IO.Path.Combine(Settings.Default.DownloadLocation + tbName.Text.Replace(" ", ""));
 
                 listSearch.Items.Clear();
+                chkList.Items.Clear();
 
                 var searchLink = $"https://www.google.com/search?q=index+of+" + tbName.Text.Trim().Replace(" ", "+");
 
@@ -132,29 +132,31 @@ namespace Seek
                 if (SearchList.Count < 1)
                 {
                     Xceed.Wpf.Toolkit.MessageBox.Show($"Did not Find valid index site for this movie.");
-                    Cursor = System.Windows.Input.Cursors.Arrow;
+                    btnSearch.Content = "Search";
                     return;
                 }
                 else
                 {
-                    Cursor = System.Windows.Input.Cursors.Wait;
-
+                    btnSearch.Content = "Sorting...";
                     foreach (var item in SearchList)
                     {
                         listSearch.Items.Add(item);
                     }
 
                     listSearch.SelectedIndex = 0;
-                    
+
+                    btnSearch.Content = "Arranging...";
                     fetchFiles(0);
                 }
 
-                Cursor = System.Windows.Input.Cursors.Arrow;
+                Xceed.Wpf.Toolkit.MessageBox.Show("DONE! \n Click 'Next' or 'Previous' to check files on other servers.");
+                btnSearch.Content = "Search";
+
             }
             catch (Exception)
             {
                 Xceed.Wpf.Toolkit.MessageBox.Show("An error occured. \n Please check your internet connection and try again.");
-                Cursor = System.Windows.Input.Cursors.Arrow;
+                btnSearch.Content = "Search";
             }
         }
 
@@ -322,8 +324,8 @@ namespace Seek
             {
                 foreach (CheckBox item in chkList.Items)
                 {
-                    var text = item.Content.ToString();
-                    if (text.Contains(tbFilter.Text.Trim()))
+                    var text = item.Content.ToString().ToLower();
+                    if (text.Contains(tbFilter.Text.Trim().ToLower()))
                     {
                         item.IsChecked = false;
                     }
