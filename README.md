@@ -10,4 +10,4 @@
 - Supports HTTP and HTTPS protocols, authentication and proxy servers
 
 ### Technologies
-C#, .NET Framework 4.5, WPF, LINQ, XML
+C#, .NET Framework 4.5, WPF, LINQ, XML, Web Scraping
