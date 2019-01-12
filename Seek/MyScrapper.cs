@@ -7,13 +7,14 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 
 namespace Seek
 {
     public class MyScrapper
     {
         static HtmlNodeCollection GetNodes(HtmlDocument doc)
-        { 
+        {
             var xPaths = new List<string>
             {
                 @"/html/body/pre/a",
@@ -25,7 +26,7 @@ namespace Seek
             HtmlNodeCollection nodes = null;
             var index = 0;
 
-            while (nodes==null)
+            while (nodes == null)
             {
                 if (index >= xPaths.Count)
                 {
@@ -38,39 +39,50 @@ namespace Seek
 
             return nodes;
         }
-        
-        public static List<string> GetGoogleLinks(string URl)
+
+        public static List<string> GetGoogleLinks(string URl, out bool done)
         {
-            var web = new HtmlWeb();
-            var xPath = @"//div[contains(concat(' ', normalize-space(@class), ' '), ' r ')]";
+                List<string> rtn = new List<string>();
 
-            var doc = web.LoadFromBrowser(URl);
-            var nodes = doc.DocumentNode.SelectNodes(xPath);
-
-            List<string> rtn = new List<string>();
-
-            foreach (var item in nodes)
+            try
             {
-                var url = item.ChildNodes.FindFirst("a").Attributes["href"].Value;
+                var web = new HtmlWeb();
+                var xPath = @"//div[contains(concat(' ', normalize-space(@class), ' '), ' r ')]";
 
-                if (url.StartsWith("http"))
+                var doc = web.LoadFromBrowser(URl);
+
+                var nodes = doc.DocumentNode.SelectNodes(xPath);
+
+                foreach (var item in nodes)
                 {
-                    try
-                    {
-                        doc = web.Load(url);
-                        var Nodes = GetNodes(doc);
+                    var url = item.ChildNodes.FindFirst("a").Attributes["href"].Value;
 
-                        if (Nodes != null)
-                        {
-                            rtn.Add(url);
-                        }
-                    }
-                    catch (Exception)
+                    if (url.StartsWith("http"))
                     {
+                        try
+                        {
+                            doc = web.Load(url);
+                            var Nodes = GetNodes(doc);
+
+                            if (Nodes != null)
+                            {
+                                rtn.Add(url);
+                            }
+                        }
+                        catch (Exception)
+                        {
+                        }
                     }
                 }
             }
-
+            catch (Exception ex)
+            {
+                Xceed.Wpf.Toolkit.MessageBox.Show("An error occured. \n Please check your internet connection and try again.\n" + ex.Message);
+            }
+            finally
+            {
+                done = true;
+            }
             return rtn;
         }
 
@@ -78,7 +90,7 @@ namespace Seek
         {
             List<string> downloadLinks = new List<string>();
             List<string> folderLinks = new List<string>();
-            
+
             var web = new HtmlWeb();
             folderLinks.Add(URL);
 
@@ -90,7 +102,7 @@ namespace Seek
 
                 var doc = web.Load(url);
 
-                var Nodes= GetNodes(doc);
+                var Nodes = GetNodes(doc);
                 if (Nodes == null)
                 {
 
@@ -109,7 +121,8 @@ namespace Seek
                         }
                         else if (isfile == true)
                         {
-                            downloadLinks.Add(Path.Combine(url, href));
+                            if (href.StartsWith("http")) { downloadLinks.Add(href); }
+                            else { downloadLinks.Add(Path.Combine(url, href)); }
                         }
                         else
                         {

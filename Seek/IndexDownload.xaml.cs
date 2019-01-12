@@ -66,60 +66,23 @@ namespace Seek
 
         private void BtnFilter_Click(object sender, RoutedEventArgs e)
         {
-            Cursor = System.Windows.Input.Cursors.Wait;
-            
-            var listfiles = MyScrapper.Webscraper(tbURL.Text.Trim());
+            Cursor = Cursors.Wait;
 
-            if (listfiles == null)
+            if (!string.IsNullOrWhiteSpace(tbFilter.Text))
             {
-                Xceed.Wpf.Toolkit.MessageBox.Show($"Did not get any file.");
-                Cursor = System.Windows.Input.Cursors.Arrow;
-                return;
-            }
-            else
-            {
-                chkList.Items.Clear();
-
-                if (tbFilter.Text == null)
+                foreach (CheckBox item in chkList.Items)
                 {
-                    foreach (var item in listfiles)
+                    var text = item.Content.ToString().ToLower();
+                    if (text.Contains(tbFilter.Text.Trim().ToLower()))
                     {
-                        var chk = new CheckBox()
-                        {
-                            Content = item,
-                            IsChecked = true,
-                        };
-
-                        chk.Unchecked += Chk_Unchecked;
-                        chk.Checked += Chk_Checked;
-
-                        chkList.Items.Add(chk);
+                        item.IsChecked = false;
                     }
                 }
-                else
-                {
-                    foreach (var item in listfiles)
-                    {
-                        if (item.EndsWith(tbFilter.Text))
-                        {
-                            var chk = new CheckBox()
-                            {
-                                Content = item,
-                                IsChecked = true,
-                            };
 
-                            chk.Unchecked += Chk_Unchecked;
-                            chk.Checked += Chk_Checked;
-
-                            chkList.Items.Add(chk);
-                        }
-                    }
-                }
+                tbFilter.Text = "";
             }
 
-            lblFilesToDownload.Content = ($"{listfiles.Count} files to download.");
-
-            Cursor = System.Windows.Input.Cursors.Arrow;
+            Cursor = Cursors.Arrow;
         }
 
         private void Chk_Checked(object sender, RoutedEventArgs e)
@@ -252,5 +215,64 @@ namespace Seek
             startImmediately = this.cbStartImmediately.IsChecked.Value;
         }
 
+        private void BtnToggleCheck_Click(object sender, RoutedEventArgs e)
+        {
+            Cursor = Cursors.Wait;
+
+            if (btnToggleCheck.Content.ToString().ToLower() == "uncheck all")
+            {
+                foreach (CheckBox item in chkList.Items)
+                {
+                    item.IsChecked = false;
+                }
+                btnToggleCheck.Content = "Check All";
+            }
+            else
+            {
+                foreach (CheckBox item in chkList.Items)
+                {
+                    item.IsChecked = true;
+                }
+                btnToggleCheck.Content = "Uncheck All";
+            }
+
+            Cursor = Cursors.Arrow;
+        }
+
+        private void BtnFetch_Click(object sender, RoutedEventArgs e)
+        {
+            Cursor = System.Windows.Input.Cursors.Wait;
+
+            var listfiles = MyScrapper.Webscraper(tbURL.Text.Trim());
+
+            if (listfiles == null)
+            {
+                Xceed.Wpf.Toolkit.MessageBox.Show($"Did not get any file.");
+                Cursor = System.Windows.Input.Cursors.Arrow;
+                return;
+            }
+            else
+            {
+                chkList.Items.Clear();
+                
+                foreach (var item in listfiles)
+                {
+                    var chk = new CheckBox()
+                    {
+                        Content = item,
+                        IsChecked = true,
+                    };
+
+                    chk.Unchecked += Chk_Unchecked;
+                    chk.Checked += Chk_Checked;
+
+                    chkList.Items.Add(chk);
+                }
+            }
+
+            lblFilesToDownload.Content = ($"{listfiles.Count} files to download.");
+
+            Cursor = System.Windows.Input.Cursors.Arrow;
+        }
     }
 }

@@ -5,7 +5,9 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -14,6 +16,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using WpfAnimatedGif;
 
 namespace Seek
 {
@@ -26,6 +29,9 @@ namespace Seek
         private bool startImmediately;
         private MainWindow mainWindow;
         private List<string> downloadUrls = new List<string>();
+        string searchLink = "";
+        bool fetchDone = false;
+        Thread t;
 
         #region Constructor
 
@@ -119,45 +125,88 @@ namespace Seek
         {
             try
             {
-                btnSearch.Content = "Searching...";
+                var img = new Image()
+                {
+                    Height = btnSearch.Height,
+                    Width = btnSearch.Height,
+                };
+
+                var image = new BitmapImage();
+                image.BeginInit();
+                image.UriSource = new Uri("loading.gif", UriKind.Relative);
+                image.EndInit();
+                ImageBehavior.SetAnimatedSource(img, image);
+
+                btnSearch.Content = img;
                 tbDownloadFolder.Text = System.IO.Path.Combine(Settings.Default.DownloadLocation + tbName.Text.Replace(" ", ""));
 
                 listSearch.Items.Clear();
                 chkList.Items.Clear();
 
-                var searchLink = $"https://www.google.com/search?q=index+of+" + tbName.Text.Trim().Replace(" ", "+");
+                searchLink = $"https://www.google.com/search?q=index+of+" + tbName.Text.Trim().Replace(" ", "+");
+                fetchDone = false;
 
-                SearchList = MyScrapper.GetGoogleLinks(searchLink);
+                t = new Thread(MyThreadStartMethod);
+                t.SetApartmentState(ApartmentState.STA);
+                t.Start();
 
-                if (SearchList.Count < 1)
-                {
-                    Xceed.Wpf.Toolkit.MessageBox.Show($"Did not Find valid index site for this movie.");
-                    btnSearch.Content = "Search";
-                    return;
-                }
-                else
-                {
-                    btnSearch.Content = "Sorting...";
-                    foreach (var item in SearchList)
-                    {
-                        listSearch.Items.Add(item);
-                    }
+                var tim = new System.Windows.Forms.Timer();
+                tim.Interval = 1000;
+                tim.Tick += Tim_Tick;
 
-                    listSearch.SelectedIndex = 0;
-
-                    btnSearch.Content = "Arranging...";
-                    fetchFiles(0);
-                }
-
-                Xceed.Wpf.Toolkit.MessageBox.Show("DONE! \n Click 'Next' or 'Previous' to check files on other servers.");
-                btnSearch.Content = "Search";
+                tim.Enabled = true;
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                Xceed.Wpf.Toolkit.MessageBox.Show("An error occured. \n Please check your internet connection and try again.");
+                Xceed.Wpf.Toolkit.MessageBox.Show("An error occured. \n Please check your internet connection and try again.\n" + ex.Message);
                 btnSearch.Content = "Search";
             }
+        }
+
+        private void Tim_Tick(object sender, EventArgs e)
+        {
+            if (fetchDone)
+            {
+                try
+                {
+                    var tim = (System.Windows.Forms.Timer)sender;
+                    tim.Stop();
+
+                    t.Abort();
+
+                    if (SearchList.Count < 1)
+                    {
+                        Xceed.Wpf.Toolkit.MessageBox.Show($"Did not Find valid index site for this movie.\n");
+                        btnSearch.Content = "Search";
+                    }
+                    else
+                    {
+                        foreach (var item in SearchList)
+                        {
+                            listSearch.Items.Add(item);
+                        }
+
+                        listSearch.SelectedIndex = 0;
+
+                        fetchFiles(0);
+
+                        Xceed.Wpf.Toolkit.MessageBox.Show("DONE! \n\n Click 'Next' or 'Previous' to view files on other servers. Note that some servers are much slower than others.\n\n" +
+                            "You can use the 'UNCHECK' button to quickly unselect items that contains a particular text.");
+                        btnSearch.Content = "Search";
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Xceed.Wpf.Toolkit.MessageBox.Show("An error occured. \n Please check your internet connection and try again.\n" + ex.Message);
+                    btnSearch.Content = "Search";
+                }
+            }
+        }
+
+        private void MyThreadStartMethod()
+        {
+            SearchList = MyScrapper.GetGoogleLinks(searchLink, out fetchDone);
         }
 
         private void Chk_Checked(object sender, RoutedEventArgs e)
@@ -292,7 +341,7 @@ namespace Seek
 
         private void BtnNext_Click(object sender, RoutedEventArgs e)
         {
-            if (listSearch.SelectedIndex < SearchList.Count-1)
+            if (listSearch.SelectedIndex < SearchList.Count - 1)
             {
                 listSearch.SelectedIndex++;
                 fetchFiles(listSearch.SelectedIndex);

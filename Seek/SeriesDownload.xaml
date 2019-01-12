@@ -18,29 +18,29 @@
             </Setter>
         </Style>
     </Window.Resources>
-    <Grid Style="{StaticResource BackgroundStyle}" Width="474" Height="501">
-        <Label Content="Save to:" Height="28" HorizontalAlignment="Left" Margin="18,379,0,0" x:Name="lblSaveTo" VerticalAlignment="Top" />
-        <TextBox Height="23" HorizontalAlignment="Left" Margin="77,381,0,0" x:Name="tbDownloadFolder" VerticalAlignment="Top" Width="284" Text="" IsReadOnly="True" />
-        <Button Content="Browse..." Height="23" HorizontalAlignment="Left" Margin="381,380,0,0" x:Name="btnBrowse" VerticalAlignment="Top" Width="75" Click="btnBrowse_Click" />
-        <Button Content="Download" Height="23" HorizontalAlignment="Left" Margin="251,465,0,0" x:Name="btnDownload" VerticalAlignment="Top" Width="75" Click="btnDownload_Click" />
-        <CheckBox Content="Start Immediately" Height="16" HorizontalAlignment="Left" Margin="251,427,0,0" x:Name="cbStartImmediately" VerticalAlignment="Top" IsChecked="True" Click="cbStartImmediately_Click" />
-        <Button Content="Cancel" Margin="381,465,0,0" x:Name="btnCancel" IsCancel="True" Height="23" VerticalAlignment="Top" HorizontalAlignment="Left" Width="75" Click="BtnCancel_Click" />
-        <CheckBox Content="Login to Server:" Height="16" HorizontalAlignment="Left" Margin="18,414,0,0" x:Name="cbLoginToServer" VerticalAlignment="Top" Click="cbLoginToServer_Click" />
-        <Label Content="Username:" Height="28" HorizontalAlignment="Left" Margin="18,431,0,0" x:Name="lblUsername" VerticalAlignment="Top" />
-        <Label Content="Password:" Height="28" HorizontalAlignment="Left" Margin="18,464,0,0" x:Name="lblPassword" VerticalAlignment="Top" />
-        <TextBox Height="23" HorizontalAlignment="Left" Margin="90,433,0,0" x:Name="tbUsername" VerticalAlignment="Top" Width="120" Text="" IsReadOnly="False" IsEnabled="False" />
-        <PasswordBox Margin="90,464,0,0" x:Name="tbPassword" IsEnabled="False" HorizontalAlignment="Left" Width="120" Height="23" VerticalAlignment="Top" />
-        <ListView HorizontalAlignment="Left" Height="142" Margin="22,197,0,0" VerticalAlignment="Top" Width="434" x:Name="chkList" ScrollViewer.HorizontalScrollBarVisibility="Visible" ScrollViewer.VerticalScrollBarVisibility="Visible">
+    <Grid Style="{StaticResource BackgroundStyle}" Width="624" Height="501">
+        <Label Content="Save to:" Height="28" HorizontalAlignment="Left" Margin="52,377,0,0" x:Name="lblSaveTo" VerticalAlignment="Top" />
+        <TextBox Height="23" HorizontalAlignment="Left" Margin="118,381,0,0" x:Name="tbDownloadFolder" VerticalAlignment="Top" Width="355" Text="" IsReadOnly="True" />
+        <Button Content="Browse..." Height="23" HorizontalAlignment="Left" Margin="490,381,0,0" x:Name="btnBrowse" VerticalAlignment="Top" Width="75" Click="btnBrowse_Click" />
+        <Button Content="Download" Height="23" HorizontalAlignment="Left" Margin="360,464,0,0" x:Name="btnDownload" VerticalAlignment="Top" Width="75" Click="btnDownload_Click" ToolTip="Adds all the selected items to the Download Queue." />
+        <CheckBox Content="Start Immediately" Height="16" HorizontalAlignment="Left" Margin="360,421,0,0" x:Name="cbStartImmediately" VerticalAlignment="Top" IsChecked="True" Click="cbStartImmediately_Click" />
+        <Button Content="Cancel" Margin="490,464,0,0" x:Name="btnCancel" IsCancel="True" Height="23" VerticalAlignment="Top" HorizontalAlignment="Left" Width="75" Click="BtnCancel_Click" />
+        <CheckBox Content="Login to Server:" Height="16" HorizontalAlignment="Left" Margin="52,413,0,0" x:Name="cbLoginToServer" VerticalAlignment="Top" Click="cbLoginToServer_Click" />
+        <Label Content="Username:" Height="28" HorizontalAlignment="Left" Margin="46,431,0,0" x:Name="lblUsername" VerticalAlignment="Top" />
+        <Label Content="Password:" Height="28" HorizontalAlignment="Left" Margin="46,464,0,0" x:Name="lblPassword" VerticalAlignment="Top" />
+        <TextBox Height="23" HorizontalAlignment="Left" Margin="118,433,0,0" x:Name="tbUsername" VerticalAlignment="Top" Width="191" Text="" IsReadOnly="False" IsEnabled="False" />
+        <PasswordBox Margin="118,464,0,0" x:Name="tbPassword" IsEnabled="False" HorizontalAlignment="Left" Width="191" Height="23" VerticalAlignment="Top" />
+        <ListView HorizontalAlignment="Left" Height="142" Margin="10,197,0,0" VerticalAlignment="Top" Width="604" x:Name="chkList" ScrollViewer.HorizontalScrollBarVisibility="Visible" ScrollViewer.VerticalScrollBarVisibility="Visible">
             <ListView.View>
                 <GridView>
                     <GridViewColumn/>
                 </GridView>
             </ListView.View>
         </ListView>
-        <TextBox Height="23" Margin="103,6,0,0" x:Name="tbName" VerticalAlignment="Top" HorizontalAlignment="Left" Width="247" />
-        <Label Content="Series Name: " Margin="22,1,0,0" x:Name="lblName" HorizontalAlignment="Left" Width="81" Height="28" VerticalAlignment="Top" />
-        <Button Content="Search" Height="23" HorizontalAlignment="Left" Margin="355,6,0,0" x:Name="btnSearch" VerticalAlignment="Top" Width="101" RenderTransformOrigin="1.534,0.523" Click="BtnSearch_Click" IsDefault="True" ToolTip="You can use S02 or s03 to specify the season you want to download." />
-        <ListView HorizontalAlignment="Left" Height="124" Margin="22,34,0,0" VerticalAlignment="Top" Width="434" x:Name="listSearch" SelectionChanged="ListSearch_SelectionChanged" ScrollViewer.HorizontalScrollBarVisibility="Visible">
+        <TextBox Height="23" Margin="87,6,0,0" x:Name="tbName" VerticalAlignment="Top" HorizontalAlignment="Left" Width="320" />
+        <Label Content="Series Name: " Margin="6,1,0,0" x:Name="lblName" HorizontalAlignment="Left" Width="81" Height="28" VerticalAlignment="Top" />
+        <Button Content="Search" Height="23" HorizontalAlignment="Left" Margin="426,6,0,0" x:Name="btnSearch" VerticalAlignment="Top" Width="123" RenderTransformOrigin="1.534,0.523" Click="BtnSearch_Click" IsDefault="True" ToolTip="You can use S02 or s03 to specify the season you want to download." />
+        <ListView HorizontalAlignment="Left" Height="124" Margin="22,34,0,0" VerticalAlignment="Top" Width="578" x:Name="listSearch" SelectionChanged="ListSearch_SelectionChanged" ScrollViewer.HorizontalScrollBarVisibility="Visible">
             <ListView.View>
                 <GridView>
                     <GridViewColumn/>
@@ -48,12 +48,12 @@
             </ListView.View>
         </ListView>
         <Label Content="0 files to download" Height="28" HorizontalAlignment="Left" Margin="18,167,0,0" x:Name="lblFilesToDownload" VerticalAlignment="Top" />
-        <Button Content="Previous" Height="23" HorizontalAlignment="Left" Margin="225,163,0,0" x:Name="btnPrev" VerticalAlignment="Top" Width="101" RenderTransformOrigin="1.534,0.523" Click="BtnPrev_Click" />
-        <Button Content="Next" Height="23" HorizontalAlignment="Left" Margin="355,163,0,0" x:Name="btnNext" VerticalAlignment="Top" Width="101" RenderTransformOrigin="1.534,0.523" Click="BtnNext_Click" />
+        <Button Content="Previous" Height="23" HorizontalAlignment="Left" Margin="334,163,0,0" x:Name="btnPrev" VerticalAlignment="Top" Width="101" RenderTransformOrigin="1.534,0.523" Click="BtnPrev_Click" />
+        <Button Content="Next" Height="23" HorizontalAlignment="Left" Margin="464,163,0,0" x:Name="btnNext" VerticalAlignment="Top" Width="101" RenderTransformOrigin="1.534,0.523" Click="BtnNext_Click" />
         <Label Content="All files that contain :" Height="28" HorizontalAlignment="Left" Margin="18,344,0,0" x:Name="lblSaveTo_Copy" VerticalAlignment="Top" />
-        <TextBox Height="23" HorizontalAlignment="Left" Margin="138,346,0,0" x:Name="tbFilter" VerticalAlignment="Top" Width="143" Text="" IsReadOnly="False" />
-        <Button Content="Uncheck All" Height="23" HorizontalAlignment="Left" Margin="381,346,0,0" x:Name="btnToggleCheck" VerticalAlignment="Top" Width="75" Click="BtnToggleCheck_Click" />
-        <Button Content="Filter..." Height="23" HorizontalAlignment="Left" Margin="289,346,0,0" x:Name="btnFilter" VerticalAlignment="Top" Width="75" Click="BtnFilter_Click" ToolTip="Unchecks all links that contain the inputed text." />
+        <TextBox Height="23" HorizontalAlignment="Left" Margin="138,346,0,0" x:Name="tbFilter" VerticalAlignment="Top" Width="283" Text="" IsReadOnly="False" />
+        <Button Content="Uncheck All" Height="23" HorizontalAlignment="Left" Margin="518,346,0,0" x:Name="btnToggleCheck" VerticalAlignment="Top" Width="75" Click="BtnToggleCheck_Click" />
+        <Button Content="Uncheck..." Height="23" HorizontalAlignment="Left" Margin="426,346,0,0" x:Name="btnFilter" VerticalAlignment="Top" Width="75" Click="BtnFilter_Click" ToolTip="Unchecks all links that contain the inputed text." RenderTransformOrigin="2.967,0.517" />
 
     </Grid>
 </Window>
