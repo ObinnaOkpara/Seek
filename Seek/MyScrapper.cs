@@ -18,6 +18,7 @@ namespace Seek
             var xPaths = new List<string>
             {
                 @"/html/body/pre/a",
+                @"/html/body/table/tr/td/a[not(contains(text(),'Parent Directory'))]",
                 @"/html/body/table/tbody/tr/td/a",
                 @"/html/body/main/div/div[2]/div[4]/table/tbody/tr/td/a",
                 @"/html/body/div[1]/table/tbody/tr/td/a"
@@ -26,6 +27,7 @@ namespace Seek
             HtmlNodeCollection nodes = null;
             var index = 0;
 
+            var t = doc.DocumentNode.ChildNodes;
             while (nodes == null)
             {
                 if (index >= xPaths.Count)
@@ -121,8 +123,14 @@ namespace Seek
                         }
                         else if (isfile == true)
                         {
+                            if (!url.EndsWith("/"))
+                            {
+                                url += "/";
+                            }
                             if (href.StartsWith("http")) { downloadLinks.Add(href); }
-                            else { downloadLinks.Add(Path.Combine(url, href)); }
+                            else {
+                                downloadLinks.Add(Path.Combine(url, href));
+                            }
                         }
                         else
                         {

@@ -24,6 +24,7 @@ namespace Seek
     {
         private bool startImmediately;
         private MainWindow mainWindow;
+        private string MainURL;
         private List<string> downloadUrls = new List<string>();
         
         public IndexDownload(MainWindow mainWin)
@@ -243,6 +244,7 @@ namespace Seek
         {
             Cursor = System.Windows.Input.Cursors.Wait;
 
+            MainURL = tbURL.Text.Trim();
             var listfiles = MyScrapper.Webscraper(tbURL.Text.Trim());
 
             if (listfiles == null)
